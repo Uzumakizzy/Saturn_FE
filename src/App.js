@@ -11,9 +11,9 @@ const TITLE = "Saturn";
 class App extends React.Component {
 
     state = {
-        authed: false,
+        authed: true,
         items: [],
-        currentPage: "Home"
+        currentPage: "Account"
     };
 
     componentDidMount = () => {
@@ -65,17 +65,17 @@ class App extends React.Component {
                     items={[
                         {
                             label: (
-                                <Button type='text'>
+                                <a>
                                     Login
-                                </Button>
+                                </a>
                             ),
                             key: '0',
                         },
                         {
                             label: (
-                                <Button type='text'>
+                                <a>
                                     Register
-                                </Button>
+                                </a>
                             ),
                             key: '1',
                         },
@@ -87,18 +87,18 @@ class App extends React.Component {
                 items={[
                     {
                         label: (
-                            <Button type='text' onClick={this.showAccountPage}>
+                            <a onClick={this.showAccountPage}>
                                 Account
-                            </Button>
+                            </a>
                         ),
                         key: '0',
                     },
                     {
                         label: (
                             // add post page here
-                            <Button type='text'>
+                            <a>
                                 Post Products
-                            </Button>
+                            </a>
                         ),
                         key: '1',
                     },
@@ -107,9 +107,9 @@ class App extends React.Component {
                     },
                     {
                         label: (
-                            <Button type='text' danger onClick={this.handleLogOut}>
+                            <a onClick={this.handleLogOut}>
                                 Log Out
-                            </Button>
+                            </a>
                         ),
                         key: '2',
                     },
@@ -136,7 +136,7 @@ class App extends React.Component {
                             </div>
                         </Col>
                         <Col>
-                            <Dropdown overlay={this.getUserMenu} >
+                            <Dropdown overlay={this.getUserMenu} arrow={{ pointAtCenter: true }} placement="bottomRight">
                                 <Button icon={<UserOutlined />} shape="circle" >
                                 </Button>
                             </Dropdown> :
@@ -147,7 +147,7 @@ class App extends React.Component {
                     <Content
                         style={{ height: "calc(100% - 64px)", margin: 20, overflow: "auto" }}
                     >
-                        {/* {this.renderContent()} */}
+                        {this.renderContent()}
                     </Content>
                 </Layout>
             </Layout>

@@ -4,6 +4,8 @@ import { UserOutlined, SearchOutlined } from "@ant-design/icons";
 import { searchItems } from './utils';
 import HomePage from "./components/HomePage";
 import AccountPage from "./components/AccountPage";
+import LoginPage from './components/LoginPage';
+import RegisterPage from './components/ResgisterPage';
 
 const { Header, Content } = Layout;
 const TITLE = "Saturn";
@@ -65,17 +67,19 @@ class App extends React.Component {
                     items={[
                         {
                             label: (
-                                <Button type='text'>
-                                    Login
-                                </Button>
+                                // <Button type='text'>
+                                //     Login
+                                // </Button>
+                                <LoginPage handleLoginSuccess={this.handleLoginSuccess}/>
                             ),
                             key: '0',
                         },
                         {
                             label: (
-                                <Button type='text'>
-                                    Register
-                                </Button>
+                                // <Button type='text'>
+                                //     Register
+                                // </Button>
+                                <RegisterPage/>
                             ),
                             key: '1',
                         },

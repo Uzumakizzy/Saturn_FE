@@ -1,12 +1,11 @@
 import React from "react";
-import { Form, Button, Input, Space, Checkbox, message, Modal } from "antd";
+import { Form, Button, Input, Space, message, Modal, InputNumber } from "antd";
 import { UserOutlined } from "@ant-design/icons";
-// import { login, register } from "../utils";
+import { register } from "../utils";
 
 class RegisterPage extends React.Component {
   formRef = React.createRef();
   state = {
-    asHost: false,
     loading: false,
     isModalVisible: false,
   };
@@ -34,13 +33,37 @@ class RegisterPage extends React.Component {
   };
 
   handleRegister = async () => {
-    console.log("register");
+    const formInstance = this.formRef.current;
+
+    try {
+      await formInstance.validateFields();
+    } catch (error) {
+      return;
+    }
+
+    this.setState({
+      loading: true,
+    });
+
+    try {
+      await register(formInstance.getFieldsValue(true));
+      message.success("Register Successfully");
+      this.setState({
+        isModalVisible: false,
+      });
+    } catch (error) {
+      message.error(error.message);
+    } finally {
+      this.setState({
+        loading: false,
+      });
+    }
   };
 
   render() {
     return (
       <>
-        <Button type="primary" onClick={this.showModal}>
+        <Button type="text" onClick={this.showModal}>
           Register
         </Button>
         <Modal
@@ -51,6 +74,7 @@ class RegisterPage extends React.Component {
         >
           <Form ref={this.formRef} onFinish={this.onFinish}>
             <Form.Item
+              label="Username"
               name="username"
               rules={[
                 {
@@ -62,10 +86,11 @@ class RegisterPage extends React.Component {
               <Input
                 disabled={this.state.loading}
                 prefix={<UserOutlined className="site-form-item-icon" />}
-                placeholder="Username"
+                // placeholder="username"
               />
             </Form.Item>
             <Form.Item
+              label="Password"
               name="password"
               rules={[
                 {
@@ -76,22 +101,32 @@ class RegisterPage extends React.Component {
             >
               <Input.Password
                 disabled={this.state.loading}
-                placeholder="Password"
+                // placeholder="Password"
               />
             </Form.Item>
             <Form.Item
+              label="Phone"
               name="phone"
               rules={[
+                {
+                  pattern: '^([-]?[1-9][0-9]*|0)$',
+                  Length: 11,
+                  message: "Please input only number for phone!",
+                },
                 {
                   required: false,
                   message: "Please input your Phone number!",
                 },
               ]}
             >
-              <Input disabled={this.state.loading} placeholder="Phone" />
+              <Input
+                disabled={this.state.loading}
+                //   placeholder="Phone"
+              />
             </Form.Item>
             <Form.Item
               name="email"
+              label="Email"
               rules={[
                 {
                   type: "email",
@@ -103,9 +138,11 @@ class RegisterPage extends React.Component {
                 },
               ]}
             >
-              <Input disabled={this.state.loading} placeholder="Email" />
+              <Input
+                disabled={this.state.loading}
+                //   placeholder="Email"
+              />
             </Form.Item>
-            
           </Form>
           <Space>
             <Button

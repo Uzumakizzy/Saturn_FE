@@ -1,12 +1,12 @@
 import React from "react";
-import { Form, Button, Input, Space, Checkbox, message, Modal } from "antd";
+import { Form, Button, Input, Space, message, Modal } from "antd";
 import { UserOutlined } from "@ant-design/icons";
-// import { login, register } from "../utils";
+import { login } from "../utils";
 
 class LoginPage extends React.Component {
   formRef = React.createRef();
   state = {
-    asHost: false,
+    // asHost: false,
     loading: false,
     isModalVisible: false,
   };
@@ -35,32 +35,33 @@ class LoginPage extends React.Component {
 
   handleLogin = async () => {
     console.log("login");
-    // const formInstance = this.formRef.current;
-    // try {
-    //   await formInstance.validateFields();
-    // } catch (error) {
-    //   return;
-    // }
-    // this.setState({
-    //   loading: true,
-    // });
-    // try {
+    const formInstance = this.formRef.current;
+    try {
+      await formInstance.validateFields();
+    } catch (error) {
+      return;
+    }
+    this.setState({
+      loading: true,
+    });
+    try {
     //   const { asHost } = this.state;
-    //   const resp = await login(formInstance.getFieldsValue(true), asHost);
-    //   this.props.handleLoginSuccess(resp.token, asHost);
-    // } catch (error) {
-    //   message.error(error.message);
-    // } finally {
-    //   this.setState({
-    //     loading: false,
-    //   });
-    // }
+      const resp = await login(formInstance.getFieldsValue(true));
+      message.success(`Welcome back, ${formInstance.getFieldValue("username")}`);
+      this.props.handleLoginSuccess(resp.token);
+    } catch (error) {
+      message.error(error.message);
+    } finally {
+      this.setState({
+        loading: false,
+      });
+    }
   };
 
   render() {
     return (
       <>
-        <Button type="primary" onClick={this.showModal}>
+        <Button type="text" onClick={this.showModal}>
           Login
         </Button>
         <Modal
@@ -72,6 +73,7 @@ class LoginPage extends React.Component {
           <Form ref={this.formRef} onFinish={this.onFinish}>
             <Form.Item
               name="username"
+              label="Username"
               rules={[
                 {
                   required: true,
@@ -82,11 +84,12 @@ class LoginPage extends React.Component {
               <Input
                 disabled={this.state.loading}
                 prefix={<UserOutlined className="site-form-item-icon" />}
-                placeholder="Username"
+                // placeholder="Username"
               />
             </Form.Item>
             <Form.Item
               name="password"
+              label="Password"
               rules={[
                 {
                   required: true,
@@ -96,7 +99,7 @@ class LoginPage extends React.Component {
             >
               <Input.Password
                 disabled={this.state.loading}
-                placeholder="Password"
+                // placeholder="Password"
               />
             </Form.Item>
           </Form>

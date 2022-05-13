@@ -67,18 +67,12 @@ class App extends React.Component {
                     items={[
                         {
                             label: (
-                                // <Button type='text'>
-                                //     Login
-                                // </Button>
                                 <LoginPage handleLoginSuccess={this.handleLoginSuccess}/>
                             ),
                             key: '0',
                         },
                         {
                             label: (
-                                // <Button type='text'>
-                                //     Register
-                                // </Button>
                                 <RegisterPage/>
                             ),
                             key: '1',
@@ -140,7 +134,7 @@ class App extends React.Component {
                             </div>
                         </Col>
                         <Col>
-                            <Dropdown overlay={this.getUserMenu} >
+                            <Dropdown overlay={this.getUserMenu} placement="bottomRight">
                                 <Button icon={<UserOutlined />} shape="circle" >
                                 </Button>
                             </Dropdown> :

@@ -4,6 +4,8 @@ import { UserOutlined, SearchOutlined } from "@ant-design/icons";
 import { searchItems } from './utils';
 import HomePage from "./components/HomePage";
 import AccountPage from "./components/AccountPage";
+import LoginPage from './components/LoginPage';
+import RegisterPage from './components/ResgisterPage';
 
 const { Header, Content } = Layout;
 const TITLE = "Saturn";
@@ -65,17 +67,13 @@ class App extends React.Component {
                     items={[
                         {
                             label: (
-                                <a>
-                                    Login
-                                </a>
+                                <LoginPage handleLoginSuccess={this.handleLoginSuccess}/>
                             ),
                             key: '0',
                         },
                         {
                             label: (
-                                <a>
-                                    Register
-                                </a>
+                                <RegisterPage/>
                             ),
                             key: '1',
                         },
@@ -136,7 +134,7 @@ class App extends React.Component {
                             </div>
                         </Col>
                         <Col>
-                            <Dropdown overlay={this.getUserMenu} arrow={{ pointAtCenter: true }} placement="bottomRight">
+                            <Dropdown overlay={this.getUserMenu} placement="bottomRight">
                                 <Button icon={<UserOutlined />} shape="circle" >
                                 </Button>
                             </Dropdown> :

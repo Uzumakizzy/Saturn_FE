@@ -1,7 +1,7 @@
 const domain = '';
 
 export const login = (credential) => {
-    const loginUrl = `${domain}/login`;
+    const loginUrl = `${domain}/authenticate`;
     return fetch(loginUrl, {
         method: "POST",
         headers: {

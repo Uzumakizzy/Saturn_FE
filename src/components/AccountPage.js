@@ -1,31 +1,31 @@
 import React from 'react';
-import { Layout, Menu, Breadcrumb } from 'antd';
-import { UserOutlined, LaptopOutlined, NotificationOutlined } from '@ant-design/icons';
+import { Layout, Menu, Breadcrumb, Button } from 'antd';
+import { UserOutlined, HeartOutlined, UnlockOutlined } from '@ant-design/icons';
 
 const { Content, Sider } = Layout;
 
-const items1 = ['1', '2', '3'].map((key) => ({
-    key,
-    label: `nav ${key}`,
-}));
+const tags = ['Profile', 'Favorites', 'Security'];
 
-const items2 = [UserOutlined, LaptopOutlined, NotificationOutlined].map((icon, index) => {
-    const key = String(index + 1);
+const tagItems = [UserOutlined, HeartOutlined, UnlockOutlined].map((icon, index) => {
     return {
-        key: `sub${key}`,
+        key: index,
         icon: React.createElement(icon),
-        label: `subnav ${key}`,
-        children: new Array(4).fill(null).map((_, j) => {
-            const subKey = index * 4 + j + 1;
-            return {
-                key: subKey,
-                label: `option${subKey}`,
-            };
-        }),
+        label: `${tags[index]}`,
     };
 });
 
 class AccountPage extends React.Component {
+
+    state = {
+        tagName: "Profile",
+        userName: "Uzumaki",
+    };
+
+    onTagSelect = ({ key }) => {
+        this.setState({
+            tagName: tags[key],
+        })
+    };
 
     render = () => (
         <>
@@ -33,13 +33,14 @@ class AccountPage extends React.Component {
                 <Sider width={200} className="site-layout-background">
                     <Menu
                         mode="inline"
-                        defaultSelectedKeys={['1']}
-                        defaultOpenKeys={['sub1']}
+                        theme="dark"
+                        defaultSelectedKeys={['0']}
                         style={{
                             height: '100%',
                             borderRight: 0,
                         }}
-                        items={items2}
+                        items={tagItems}
+                        onSelect={this.onTagSelect}
                     />
                 </Sider>
                 <Layout
@@ -52,24 +53,25 @@ class AccountPage extends React.Component {
                             margin: '16px 0',
                         }}
                     >
-                        <Breadcrumb.Item>Home</Breadcrumb.Item>
-                        <Breadcrumb.Item>List</Breadcrumb.Item>
-                        <Breadcrumb.Item>App</Breadcrumb.Item>
+                        <Breadcrumb.Item>
+                            Welcome, {this.state.userName}!
+                        </Breadcrumb.Item>
                     </Breadcrumb>
                     <Content
                         className="site-layout-background"
                         style={{
                             padding: 24,
                             margin: 0,
-                            minHeight: 280,
+                            minHeight: 700,
+                            minWidth: 700,
                         }}
                     >
-                        Content
+                        {this.state.tagName}
                     </Content>
                 </Layout>
             </Layout>
         </>
-    )
+    );
 
 }
 

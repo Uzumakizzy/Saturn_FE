@@ -82,9 +82,9 @@ export const searchItems = (data) => {
 
 export const uploadItem = (data) => {
     const authToken = localStorage.getItem("authToken");
-    const uploadStayUrl = `${domain}/items`;
+    const uploadItemUrl = `${domain}/items`;
    
-    return fetch(uploadStayUrl, {
+    return fetch(uploadItemUrl, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${authToken}`,

@@ -39,20 +39,20 @@ const layout = {
       }
    
       for (let i = 0; i < files.length; i++) {
-        formData.append("images", files[i]);
+        formData.append("itemImages", files[i]);
       }
    
-      formData.append("title", values.title);
-      formData.append("category", values.category);
-      formData.append("price", values.price);
-      formData.append("condition", values.condition);
-      formData.append("brand", values.brand);
-      formData.append("state", values.state);
-      formData.append("city", values.city);
-      formData.append("description", values.description);
-      formData.append("name", values.name);
-      formData.append("phone", values.phone);
-      formData.append("email", values.email);
+      formData.append("itemName", values.itemName);
+      //formData.append("category", values.category);
+      formData.append("itemPrice", values.itemPrice);
+      //formData.append("condition", values.condition);
+      //formData.append("brand", values.brand);
+      //formData.append("state", values.state);
+      //formData.append("city", values.city);
+      formData.append("itemDesc", values.itemDesc);
+      //formData.append("name", values.name);
+      //formData.append("phone", values.phone);
+      //formData.append("email", values.email);
    
       this.setState({
         loading: true,
@@ -83,10 +83,12 @@ const layout = {
             </center>
           <Divider/>
           </p>
-          <Form.Item name="title" label="Title" rules={[{ required: true }]}>
+          <Form.Item name="itemName" label="Title" rules={[{ required: true }]}>
             <Input />
           </Form.Item>
-          <Form.Item name="category" label="Category" rules={[{ required: true }]}>
+          <Form.Item name="category" label="Category" 
+          //rules={[{ required: true }]}
+          >
           <Select
           placeholder="Select a option to choose a category"
           
@@ -97,7 +99,7 @@ const layout = {
           <Option value="books">books</Option>
         </Select>
           </Form.Item>
-          <Form.Item name="price" label="Price" rules={[{ required: true }]}>
+          <Form.Item name="itemPrice" label="Price" rules={[{ required: true }]}>
             <Input />
           </Form.Item>
           <Form.Item name="condition" label="Condition" >
@@ -106,21 +108,27 @@ const layout = {
           <Form.Item name="brand" label="Brand" >
             <Input />
           </Form.Item>
-          <Form.Item name="state" label="State" rules={[{ required: true }]}>
+          <Form.Item name="state" label="State" 
+          //rules={[{ required: true }]}
+          >
             <Input />
           </Form.Item>
-          <Form.Item name="city" label="City" rules={[{ required: true }]}>
+          <Form.Item name="city" label="City" 
+          //rules={[{ required: true }]}
+          >
             <Input />
           </Form.Item>
           <Form.Item
-            name="description"
+            name="itemDesc"
             label="Description"
             rules={[{ required: true }]}
           >
             <Input.TextArea autoSize={{ minRows: 2, maxRows: 6 }} />
           </Form.Item>
         
-          <Form.Item name="picture" label="Picture" rules={[{ required: true }]}>
+          <Form.Item name="picture" label="Picture" 
+          //rules={[{ required: true }]}
+          >
             <input
               icon={<UploadOutlined />}
               type="file"
@@ -138,13 +146,15 @@ const layout = {
           </p>
 
           
-          <Form.Item name="name" label="Name" rules={[{ required: true }]}>
+          <Form.Item name="name" label="Name" 
+          //rules={[{ required: true }]}
+          >
             <Input />
           </Form.Item>
           <Form.Item
             name="phone"
             label="Phone Number"
-            rules={[{ required: true, message: 'Please input your phone number' }]}
+            //rules={[{ required: true, message: 'Please input your phone number' }]}
           >
             <Input addonBefore={prefixSelector} style={{ width: '100%' }} />
           </Form.Item>
@@ -157,7 +167,7 @@ const layout = {
                 message: 'The input is not valid E-mail',
               },
               {
-                required: true,
+                //required: true,
                 message: 'Please input your E-mail',
               },
             ]}

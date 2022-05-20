@@ -22,27 +22,32 @@ class Filter extends React.Component {
     } catch (error) {
       return;
     }
-    let priceMax = formInstance.getFieldValue("priceMax");
-    let priceMin = formInstance.getFieldValue("priceMin");
-    if (priceMin > priceMax) {
+    let priceMax = formInstance.getFieldValue("priceMax") === undefined ? "" : formInstance.getFieldValue("priceMax");
+    let priceMin = formInstance.getFieldValue("priceMin") === undefined ? "" : formInstance.getFieldValue("priceMin");
+    let itemName = formInstance.getFieldValue("itemName") === undefined ? "" : "=" + formInstance.getFieldValue("itemName");
+    let itemDesc = formInstance.getFieldValue("itemDesc") === undefined ? "" : "=" + formInstance.getFieldValue("itemDesc");
+    if (priceMin !== undefined && priceMax !== undefined && priceMin > priceMax) {
         message.error("Min price cannot greater than Max price");
         return;
     }
-
-    // this.setState({
-    //   loading: true,
-    // });
+    priceMax = priceMax === undefined ? "" : "=" + priceMax;
+    priceMin = priceMin === undefined ? "" : "=" + priceMin;
+    this.setState({
+      loading: true,
+    });
     console.log(formInstance.getFieldsValue(true));
-    // try {
-    //   const resp = await searchItems(formInstance.getFieldsValue(true));
-    // //   this.props.handleLoginSuccess(resp.token);
-    // } catch (error) {
-    //   message.error(error.message);
-    // } finally {
-    //   this.setState({
-    //     loading: false,
-    //   });
-    // }
+    try {
+      const resp = await searchItems(itemName, itemDesc, priceMin, priceMax);
+      // this.props.handleLoginSuccess(resp.token);
+      // Log response data
+      console.log(resp);
+    } catch (error) {
+      message.error(error.message);
+    } finally {
+      this.setState({
+        loading: false,
+      });
+    }
   };
 
   render() {

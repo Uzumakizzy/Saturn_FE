@@ -1,7 +1,7 @@
 import React from 'react';
-import { Layout, Dropdown, Menu, Button, Input, Row, Col } from "antd";
+import { Layout, Dropdown, Menu, Button, Input, Row, Col, message } from "antd";
 import { UserOutlined, SearchOutlined } from "@ant-design/icons";
-import { searchItems } from './utils';
+import { searchItems, getUserProfile } from './utils';
 import HomePage from "./components/HomePage";
 import AccountPage from "./components/AccountPage";
 import LoginPage from './components/LoginPage';
@@ -13,13 +13,15 @@ const TITLE = "Saturn";
 class App extends React.Component {
 
     state = {
-        authed: true,
+        authed: false,
         items: [],
-        currentPage: "Account"
+        userProfile: {},
+        currentPage: "Home",
     };
 
     componentDidMount = () => {
         document.title = TITLE;
+
         // const authToken = localStorage.getItem("authToken");
         // searchItems()
         // .then((data) => {
@@ -30,7 +32,7 @@ class App extends React.Component {
         // }).catch((err) => {
         //     message.error(err.message);
         // });
-    }
+    };
 
     handleLoginSuccess = (token) => {
         localStorage.setItem("authToken", token);
@@ -49,14 +51,16 @@ class App extends React.Component {
 
     renderContent = () => {
         if (this.state.currentPage === "Account") {
-            return <AccountPage />;
+            return <AccountPage profile={this.state.userProfile} />;
         }
         return <HomePage items={this.state.items} />;
     };
 
-    showAccountPage = () => {
+    showAccountPage = async () => {
+        const resp = await getUserProfile();
         this.setState({
-            currentPage: "Account"
+            currentPage: "Account",
+            userProfile: resp,
         });
     };
 

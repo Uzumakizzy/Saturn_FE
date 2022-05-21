@@ -80,3 +80,99 @@ export const searchItems = (data) => {
     });
 }
 
+export const getMyItems = (value="") => {
+    const authToken = localStorage.getItem("authToken");
+    const getItemUrl = `${domain}/items/${value}`;
+
+    return fetch(getItemUrl, {
+        headers: {
+            Authorization: `Bearer ${authToken}`,
+        },
+    }).then((response) => {
+        if (response.status !== 200) {
+            throw Error("Fail to get my items.");
+        }
+        return response.json();
+    });
+}
+
+export const markSold = (itemId) => {
+    const authToken = localStorage.getItem("authToken");
+    const markSoldUrl = `${domain}/sold/${itemId}`;
+
+    return fetch(markSoldUrl, {
+        method: "PUT",
+        headers: {
+            Authorization: `Bearer  ${authToken}`,
+        },
+    }).then(response => {
+        if (response.status !== 200) {
+            throw Error("Fail to mark item as sold.");
+        }
+    });
+}
+
+export const getUserProfile = () => {
+    const authToken = localStorage.getItem("authToken");
+    const getProfileUrl = `${domain}/user/`;
+
+    return fetch(getProfileUrl, {
+        headers: {
+            Authorization: `Bearer ${authToken}`,
+        },
+    }).then(response => {
+        if (response.status !== 200) {
+            throw Error("Fail to retrive user profile.");
+        }
+        return response.json();
+    });
+}
+
+export const updateUser = (data) => {
+    const authToken = localStorage.getItem("authToken");
+    const updateUserUrl = `${domain}/user/`;
+
+    return fetch(updateUserUrl, {
+        method: "PUT",
+        headers: {
+            Authorization: `Bearer ${authToken}`,
+        },
+        body: data,
+    }).then(response => {
+        if (response.status !== 200) {
+            throw Error("Fail to update user profile.");
+        }
+    });
+}
+
+export const getFavorite = () => {
+    const authToken = localStorage.getItem("authToken");
+    const getFavUrl = `${domain}/favorite/`;
+
+    return fetch(getFavUrl, {
+        headers: {
+            Authorization: `Bearer ${authToken}`,
+        },
+    }).then(response => {
+        if (response.status !== 200) {
+            throw Error("Fail to get favorite items.");
+        }
+        return response.json();
+    });
+}
+
+export const removeFav = (itemId) => {
+    const authToken = localStorage.getItem("authToken");
+    const dislikeUrl = `${domain}/favorite/${itemId}`;
+
+    return fetch(dislikeUrl, {
+        method: "DELETE",
+        headers: {
+            Authorization: `Bearer ${authToken}`,
+        },
+    }).then(response => {
+        if (response.status !== 200) {
+            throw Error("Fail to dislilke this item.");
+        }
+    });
+}

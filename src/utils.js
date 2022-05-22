@@ -80,3 +80,19 @@ export const searchItems = (itemName, itemDesc, priceMin, priceMax) => {
     });
 }
 
+export const uploadItem = (data) => {
+    const authToken = localStorage.getItem("authToken");
+    const uploadItemUrl = `${domain}/items`;
+   
+    return fetch(uploadItemUrl, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${authToken}`,
+      },
+      body: data,
+    }).then((response) => {
+      if (response.status !== 200) {
+        throw Error("Fail to upload item");
+      }
+    });
+}

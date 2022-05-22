@@ -1,11 +1,12 @@
 import React from 'react';
-import { Layout, Dropdown, Menu, Button, Input, Row, Col } from "antd";
-import { UserOutlined, SearchOutlined } from "@ant-design/icons";
+import { Layout, Dropdown, Menu, Button, Input, Row, Col, Modal} from "antd";
+import { UserOutlined, SearchOutlined, PlusCircleOutlined } from "@ant-design/icons";
 import { searchItems } from './utils';
 import HomePage from "./components/HomePage";
 import AccountPage from "./components/AccountPage";
 import LoginPage from './components/LoginPage';
 import RegisterPage from './components/ResgisterPage';
+import UploadItem from './components/UploadItem';
 
 const { Header, Content } = Layout;
 const TITLE = "Saturn";
@@ -44,6 +45,18 @@ class App extends React.Component {
         this.setState({
             authed: false,
             currentPage: "Home"
+        });
+    };
+
+    handleUploadItem = () => {
+        this.setState({
+          modalVisible: true,
+        });
+    };
+      
+    handleCancel = () => {
+        this.setState({
+          modalVisible: false,
         });
     };
 
@@ -134,7 +147,26 @@ class App extends React.Component {
                             </div>
                         </Col>
                         <Col>
-                            <Dropdown overlay={this.getUserMenu} placement="bottomRight">
+
+                            <div> 
+                            <Button type = "primary" icon={<PlusCircleOutlined />} onClick={this.handleUploadItem}>
+                              Post
+                            </Button>
+                            <Modal title="Item Details" 
+                              destroyOnClose={true}
+                              visible={this.state.modalVisible}
+                              footer={null}
+                              onCancel={this.handleCancel}
+                            >
+                              <UploadItem />
+                            </Modal>
+                            </div>
+                        </Col>
+                        <Col>
+
+
+                            <Dropdown overlay={this.getUserMenu} >
+
                                 <Button icon={<UserOutlined />} shape="circle" >
                                 </Button>
                             </Dropdown> :

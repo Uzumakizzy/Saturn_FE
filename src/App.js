@@ -145,13 +145,12 @@ class App extends React.Component {
                     <Content
                         style={{ height: "calc(100% - 64px)", margin: 20, overflow: "auto" }}
                     >
-                        {/* {this.renderContent()} */}
+                        {this.renderContent()} 
                     </Content>
                 </Layout>
             </Layout>
         </>
     )
-
 }
-
+ 
 export default App;

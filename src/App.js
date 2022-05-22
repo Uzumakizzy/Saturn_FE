@@ -1,12 +1,11 @@
 import React from 'react';
-import { Layout, Dropdown, Menu, Button, Input, Row, Col, Modal} from "antd";
-import { UserOutlined, SearchOutlined, PlusCircleOutlined } from "@ant-design/icons";
-import { searchItems } from './utils';
+import { Layout, Dropdown, Menu, Button, Row, Col } from "antd";
+import { UserOutlined } from "@ant-design/icons";
 import HomePage from "./components/HomePage";
 import AccountPage from "./components/AccountPage";
 import LoginPage from './components/LoginPage';
 import RegisterPage from './components/ResgisterPage';
-import UploadItem from './components/UploadItem';
+import PostPage from './components/PostPage';
 
 const { Header, Content } = Layout;
 const TITLE = "Saturn";
@@ -48,18 +47,6 @@ class App extends React.Component {
         });
     };
 
-    handleUploadItem = () => {
-        this.setState({
-          modalVisible: true,
-        });
-    };
-      
-    handleCancel = () => {
-        this.setState({
-          modalVisible: false,
-        });
-    };
-
     renderContent = () => {
         if (this.state.currentPage === "Account") {
             return <AccountPage />;
@@ -80,13 +67,13 @@ class App extends React.Component {
                     items={[
                         {
                             label: (
-                                <LoginPage handleLoginSuccess={this.handleLoginSuccess}/>
+                                <LoginPage handleLoginSuccess={this.handleLoginSuccess} />
                             ),
                             key: '0',
                         },
                         {
                             label: (
-                                <RegisterPage/>
+                                <RegisterPage />
                             ),
                             key: '1',
                         },
@@ -98,18 +85,15 @@ class App extends React.Component {
                 items={[
                     {
                         label: (
-                            <Button type='text' onClick={this.showAccountPage}>
+                            <a onClick={this.showAccountPage}>
                                 Account
-                            </Button>
+                            </a>
                         ),
                         key: '0',
                     },
                     {
                         label: (
-                            // add post page here
-                            <Button type='text'>
-                                Post Products
-                            </Button>
+                            <PostPage />
                         ),
                         key: '1',
                     },
@@ -118,9 +102,9 @@ class App extends React.Component {
                     },
                     {
                         label: (
-                            <Button type='text' danger onClick={this.handleLogOut}>
+                            <a onClick={this.handleLogOut}>
                                 Log Out
-                            </Button>
+                            </a>
                         ),
                         key: '2',
                     },
@@ -138,38 +122,19 @@ class App extends React.Component {
                                 Saturn
                             </div>
                         </Col>
-                        <Col className='searchArea'>
+                        {/* <Col className='searchArea'>
                             <div style={{ display: "inline-block", width: "100%" }}>
                                 <Input placeholder="keywords..." allowClear />
                             </div>
                             <div style={{ display: "inline-block", padding: "0 0 0 10px" }}>
                                 <Button type="primary" shape="circle" icon={<SearchOutlined />} />
                             </div>
-                        </Col>
+                        </Col> */}
                         <Col>
-
-                            <div> 
-                            <Button type = "primary" icon={<PlusCircleOutlined />} onClick={this.handleUploadItem}>
-                              Post
-                            </Button>
-                            <Modal title="Item Details" 
-                              destroyOnClose={true}
-                              visible={this.state.modalVisible}
-                              footer={null}
-                              onCancel={this.handleCancel}
-                            >
-                              <UploadItem />
-                            </Modal>
-                            </div>
-                        </Col>
-                        <Col>
-
-
-                            <Dropdown overlay={this.getUserMenu} >
-
+                            <Dropdown overlay={this.getUserMenu} placement="bottomRight">
                                 <Button icon={<UserOutlined />} shape="circle" >
                                 </Button>
-                            </Dropdown> :
+                            </Dropdown>
                         </Col>
                     </Row>
                 </Header>
@@ -177,12 +142,12 @@ class App extends React.Component {
                     <Content
                         style={{ height: "calc(100% - 64px)", margin: 20, overflow: "auto" }}
                     >
-                        {this.renderContent()} 
+                        {this.renderContent()}
                     </Content>
                 </Layout>
             </Layout>
         </>
     )
 }
- 
+
 export default App;

@@ -64,19 +64,19 @@ export const editItem = (itemId, data) => {
     });
 }
 
-export const searchItems = (data) => {
-    const searchItemUrl = `${domain}/search`;
-
+export const searchItems = (itemName, itemDesc, priceMin, priceMax) => {
+    const searchItemUrl = `${domain}/search?itemName${itemName}&itemDesc${itemDesc}&priceMin${priceMin}&priceMax${priceMax}`;
+    console.log(searchItemUrl);
     return fetch(searchItemUrl, {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
+        }
     }).then((response) => {
         if (response.status !== 200) {
             throw Error("Fail to search.");
         }
+        return response.json();
     });
 }
 

@@ -80,18 +80,12 @@ class App extends React.Component {
                     items={[
                         {
                             label: (
-                                // <Button type='text'>
-                                //     Login
-                                // </Button>
                                 <LoginPage handleLoginSuccess={this.handleLoginSuccess}/>
                             ),
                             key: '0',
                         },
                         {
                             label: (
-                                // <Button type='text'>
-                                //     Register
-                                // </Button>
                                 <RegisterPage/>
                             ),
                             key: '1',
@@ -153,6 +147,7 @@ class App extends React.Component {
                             </div>
                         </Col>
                         <Col>
+
                             <div> 
                             <Button type = "primary" icon={<PlusCircleOutlined />} onClick={this.handleUploadItem}>
                               Post
@@ -168,7 +163,10 @@ class App extends React.Component {
                             </div>
                         </Col>
                         <Col>
+
+
                             <Dropdown overlay={this.getUserMenu} >
+
                                 <Button icon={<UserOutlined />} shape="circle" >
                                 </Button>
                             </Dropdown> :
@@ -179,13 +177,12 @@ class App extends React.Component {
                     <Content
                         style={{ height: "calc(100% - 64px)", margin: 20, overflow: "auto" }}
                     >
-                        {/* {this.renderContent()} */}
+                        {this.renderContent()} 
                     </Content>
                 </Layout>
             </Layout>
         </>
     )
-
 }
-
+ 
 export default App;

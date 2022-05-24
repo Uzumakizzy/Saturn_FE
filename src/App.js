@@ -6,6 +6,7 @@ import AccountPage from "./components/AccountPage";
 import LoginPage from './components/LoginPage';
 import RegisterPage from './components/ResgisterPage';
 import PostPage from './components/PostPage';
+import GuestHomePage from './components/GuestHomePage';
 
 const { Header, Content } = Layout;
 const TITLE = "Saturn";
@@ -51,7 +52,11 @@ class App extends React.Component {
         if (this.state.currentPage === "Account") {
             return <AccountPage />;
         }
+        if(this.state.authed){
         return <HomePage items={this.state.items} />;
+        }else{
+            return <GuestHomePage items = {this.state.items}/>
+        }
     };
 
     showAccountPage = () => {

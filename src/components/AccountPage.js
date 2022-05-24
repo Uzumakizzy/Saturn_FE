@@ -1,5 +1,5 @@
 import React from 'react';
-import { Layout, Menu, Breadcrumb, Button, List, Card, Carousel, Image, message, Form, Input } from 'antd';
+import { Layout, Menu, Breadcrumb, Button, List, Card, Carousel, Image, message, Form, Input, Popover } from 'antd';
 import { UserOutlined, HeartOutlined, ShoppingOutlined, LeftCircleFilled, RightCircleFilled, LaptopOutlined, StarFilled } from '@ant-design/icons';
 import Text from "antd/lib/typography/Text";
 import { getMyItems, deleteItem, markSold, updateUser, getFavorite, removeFav } from '../utils';
@@ -20,7 +20,6 @@ class AccountPage extends React.Component {
 
     state = {
         tagName: "Profile",
-        userName: "Uzumaki",
     };
 
     onTagSelect = ({ key }) => {
@@ -29,21 +28,21 @@ class AccountPage extends React.Component {
         })
     };
 
-    renderContent = (profile) => {
+    renderContent = (profile, handleProfileChange) => {
         if (this.state.tagName === 'My Listed Products') {
             return (<MyProducts />);
         } else if (this.state.tagName === 'Profile') {
-            return (<ProfilePage profile={profile} />);
+            return (<ProfilePage profile={profile} handleProfileChange={handleProfileChange} />);
         } else if (this.state.tagName === 'Products being asked') {
             return (<ProductsAsked />);
         } else {
-            return this.state.tagName;
+            return (<FavProducts />);
         }
     }
 
     render = () => {
 
-        const { profile } = this.props;
+        const { profile, handleProfileChange } = this.props;
 
         return (
             <>
@@ -84,7 +83,7 @@ class AccountPage extends React.Component {
                                 minWidth: 700,
                             }}
                         >
-                            {this.renderContent(profile)}
+                            {this.renderContent(profile, handleProfileChange)}
                         </Content>
                     </Layout>
                 </Layout>
@@ -232,7 +231,7 @@ class ProductsAsked extends React.Component {
                                         </Text>
                                     </div>
                                 }
-                                actions={[<ProductDetails item={item} />]}
+                                actions={[<ProductAskedDetails item={item} />]}
                                 extra={<MarkSoldButton item={item} onSoldSuccess={this.loadData} />}
                             >
                                 {
@@ -295,6 +294,53 @@ class ProductDetails extends React.Component {
         );
     }
 
+}
+
+class ProductAskedDetails extends React.Component {
+    render = () => {
+        const { item } = this.props;
+        let ask_person = ''
+        for (let i = 0; i < item.asks.length; i++) {
+            if (i > 0) {
+                ask_person = ask_person.concat(', ')
+            }
+            ask_person = ask_person.concat(item.asks[i].ask_by);
+        }
+        const data = [
+            {
+                title: 'Price: (Dollar)',
+                value: item.price,
+            },
+            {
+                title: 'Description:',
+                value: item.description,
+            },
+            {
+                title: 'Status:',
+                value: item.status,
+            },
+            {
+                title: "Asked by:",
+                value: ask_person,
+            }
+        ]
+        return (
+            <>
+                <List
+                    itemLayout="horizontal"
+                    dataSource={data}
+                    renderItem={(item) => (
+                        <List.Item>
+                            <List.Item.Meta
+                                title={item.title}
+                                description={item.value}
+                            />
+                        </List.Item>
+                    )}
+                />
+            </>
+        );
+    }
 }
 
 class RemoveProductButton extends React.Component {
@@ -442,13 +488,16 @@ class DislikeButton extends React.Component {
 
     render = () => {
         return (
-            <Button
-                icon={<StarFilled />}
-                loading={this.state.loading}
-                onClick={this.handleDislike}
-                shape='circle'
-                type='primary'
-            />
+            <Popover content={"Dislike"} trigger="hover">
+                <Button
+                    icon={<StarFilled />}
+                    loading={this.state.loading}
+                    onClick={this.handleDislike}
+                    shape='circle'
+                    danger={true}
+                    type='primary'
+                />
+            </Popover>
         )
     };
 }
@@ -494,7 +543,6 @@ class ProfilePage extends React.Component {
 
     state = {
         loading: false,
-        data: {},
     };
 
     onFinish = async (values) => {
@@ -517,6 +565,7 @@ class ProfilePage extends React.Component {
                 loading: false,
             });
         }
+        this.props.handleProfileChange();
     }
 
     render = () => {

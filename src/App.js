@@ -1,7 +1,7 @@
 import React from 'react';
 import { Layout, Dropdown, Menu, Button, Input, Row, Col, message } from "antd";
 import { UserOutlined, SearchOutlined } from "@ant-design/icons";
-import { searchItems, getUserProfile } from './utils';
+import { getUserProfile } from './utils';
 import HomePage from "./components/HomePage";
 import AccountPage from "./components/AccountPage";
 import LoginPage from './components/LoginPage';
@@ -51,7 +51,7 @@ class App extends React.Component {
 
     renderContent = () => {
         if (this.state.currentPage === "Account") {
-            return <AccountPage profile={this.state.userProfile} />;
+            return <AccountPage profile={this.state.userProfile} handleProfileChange={this.showAccountPage}/>;
         }
         return <HomePage items={this.state.items} />;
     };
@@ -129,14 +129,14 @@ class App extends React.Component {
                                 Saturn
                             </div>
                         </Col>
-                        <Col className='searchArea'>
+                        {/* <Col className='searchArea'>
                             <div style={{ display: "inline-block", width: "100%" }}>
                                 <Input placeholder="keywords..." allowClear />
                             </div>
                             <div style={{ display: "inline-block", padding: "0 0 0 10px" }}>
                                 <Button type="primary" shape="circle" icon={<SearchOutlined />} />
                             </div>
-                        </Col>
+                        </Col> */}
                         <Col>
                             <Dropdown overlay={this.getUserMenu} placement="bottomRight">
                                 <Button icon={<UserOutlined />} shape="circle" >

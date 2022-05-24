@@ -64,23 +64,23 @@ export const editItem = (itemId, data) => {
     });
 }
 
-export const searchItems = (data) => {
-    const searchItemUrl = `${domain}/search`;
-
+export const searchItems = (itemName, itemDesc, priceMin, priceMax) => {
+    const searchItemUrl = `${domain}/search?itemName${itemName}&itemDesc${itemDesc}&priceMin${priceMin}&priceMax${priceMax}`;
+    console.log(searchItemUrl);
     return fetch(searchItemUrl, {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
+        }
     }).then((response) => {
         if (response.status !== 200) {
             throw Error("Fail to search.");
         }
+        return response.json();
     });
 }
 
-export const getMyItems = (value="") => {
+export const getMyItems = (value = "") => {
     const authToken = localStorage.getItem("authToken");
     const getItemUrl = `${domain}/items/${value}`;
 
@@ -173,6 +173,23 @@ export const removeFav = (itemId) => {
     }).then(response => {
         if (response.status !== 200) {
             throw Error("Fail to dislilke this item.");
+        }
+    });
+}
+
+export const uploadItem = (data) => {
+    const authToken = localStorage.getItem("authToken");
+    const uploadItemUrl = `${domain}/items`;
+
+    return fetch(uploadItemUrl, {
+        method: "POST",
+        headers: {
+            Authorization: `Bearer ${authToken}`,
+        },
+        body: data,
+    }).then((response) => {
+        if (response.status !== 200) {
+            throw Error("Fail to upload item");
         }
     });
 }

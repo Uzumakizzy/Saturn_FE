@@ -1,11 +1,11 @@
 import React from 'react';
-import { Layout, Dropdown, Menu, Button, Input, Row, Col, message } from "antd";
-import { UserOutlined, SearchOutlined } from "@ant-design/icons";
-import { getUserProfile } from './utils';
+import { Layout, Dropdown, Menu, Button, Row, Col } from "antd";
+import { UserOutlined } from "@ant-design/icons";
 import HomePage from "./components/HomePage";
 import AccountPage from "./components/AccountPage";
 import LoginPage from './components/LoginPage';
 import RegisterPage from './components/ResgisterPage';
+import PostPage from './components/PostPage';
 
 const { Header, Content } = Layout;
 const TITLE = "Saturn";
@@ -71,13 +71,13 @@ class App extends React.Component {
                     items={[
                         {
                             label: (
-                                <LoginPage handleLoginSuccess={this.handleLoginSuccess}/>
+                                <LoginPage handleLoginSuccess={this.handleLoginSuccess} />
                             ),
                             key: '0',
                         },
                         {
                             label: (
-                                <RegisterPage/>
+                                <RegisterPage />
                             ),
                             key: '1',
                         },
@@ -97,10 +97,7 @@ class App extends React.Component {
                     },
                     {
                         label: (
-                            // add post page here
-                            <a>
-                                Post Products
-                            </a>
+                            <PostPage />
                         ),
                         key: '1',
                     },
@@ -141,7 +138,7 @@ class App extends React.Component {
                             <Dropdown overlay={this.getUserMenu} placement="bottomRight">
                                 <Button icon={<UserOutlined />} shape="circle" >
                                 </Button>
-                            </Dropdown> :
+                            </Dropdown>
                         </Col>
                     </Row>
                 </Header>
@@ -155,7 +152,6 @@ class App extends React.Component {
             </Layout>
         </>
     )
-
 }
 
 export default App;

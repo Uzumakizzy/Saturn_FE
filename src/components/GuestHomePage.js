@@ -5,7 +5,7 @@ import UploadItem from "./UploadItem";
  
 const { TabPane } = Tabs;
  
-class HomePage extends React.Component {
+class GuestHomePage extends React.Component {
   render() {
     // return (
     //   <Tabs defaultActiveKey="1" destroyInactiveTabPane={true}>
@@ -29,9 +29,9 @@ class HomePage extends React.Component {
         <TabPane tab="All Goods" key="1">
           <div>There are All Goods</div>
         </TabPane>
-        <TabPane tab="Upload My Goods" key="2">
+        {/* <TabPane tab="Upload My Goods" key="2">
           <UploadItem/>
-        </TabPane>
+        </TabPane> */}
       </Tabs>
             </Col>
         </Row>
@@ -40,4 +40,4 @@ class HomePage extends React.Component {
   }
 }
  
-export default HomePage;
+export default GuestHomePage;

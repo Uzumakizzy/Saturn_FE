@@ -1,6 +1,6 @@
 import React from 'react';
 import { Layout, Menu, Breadcrumb, Button, List, Card, Carousel, Image, message, Form, Input, Popover } from 'antd';
-import { UserOutlined, HeartOutlined, ShoppingOutlined, LeftCircleFilled, RightCircleFilled, LaptopOutlined, StarFilled } from '@ant-design/icons';
+import { UserOutlined, HeartOutlined, ShoppingOutlined, LeftCircleFilled, RightCircleFilled, LaptopOutlined, StarFilled, HeartFilled } from '@ant-design/icons';
 import Text from "antd/lib/typography/Text";
 import { getMyItems, deleteItem, markSold, updateUser, getFavorite, removeFav } from '../utils';
 
@@ -176,6 +176,44 @@ class MyProducts extends React.Component {
 
 }
 
+class ProductDetails extends React.Component {
+
+    render = () => {
+        const { item } = this.props;
+        const data = [
+            {
+                title: 'Price: (Dollar)',
+                value: item.price,
+            },
+            {
+                title: 'Description:',
+                value: item.description,
+            },
+            {
+                title: 'Status:',
+                value: item.status,
+            },
+        ]
+        return (
+            <>
+                <List
+                    itemLayout="horizontal"
+                    dataSource={data}
+                    renderItem={(item) => (
+                        <List.Item>
+                            <List.Item.Meta
+                                title={item.title}
+                                description={item.value}
+                            />
+                        </List.Item>
+                    )}
+                />
+            </>
+        );
+    }
+
+}
+
 class ProductsAsked extends React.Component {
     state = {
         loading: false,
@@ -255,44 +293,6 @@ class ProductsAsked extends React.Component {
             </>
         );
     };
-
-}
-
-class ProductDetails extends React.Component {
-
-    render = () => {
-        const { item } = this.props;
-        const data = [
-            {
-                title: 'Price: (Dollar)',
-                value: item.price,
-            },
-            {
-                title: 'Description:',
-                value: item.description,
-            },
-            {
-                title: 'Status:',
-                value: item.status,
-            },
-        ]
-        return (
-            <>
-                <List
-                    itemLayout="horizontal"
-                    dataSource={data}
-                    renderItem={(item) => (
-                        <List.Item>
-                            <List.Item.Meta
-                                title={item.title}
-                                description={item.value}
-                            />
-                        </List.Item>
-                    )}
-                />
-            </>
-        );
-    }
 
 }
 
@@ -488,16 +488,13 @@ class DislikeButton extends React.Component {
 
     render = () => {
         return (
-            <Popover content={"Dislike"} trigger="hover">
-                <Button
-                    icon={<StarFilled />}
-                    loading={this.state.loading}
-                    onClick={this.handleDislike}
-                    shape='circle'
-                    danger={true}
-                    type='primary'
-                />
-            </Popover>
+            <Button
+                icon={<HeartFilled />}
+                loading={this.state.loading}
+                onClick={this.handleDislike}
+                shape='circle'
+                style={{ color: "red" }}
+            />
         )
     };
 }

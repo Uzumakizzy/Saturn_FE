@@ -1,11 +1,12 @@
 import React from 'react';
-import { Layout, Dropdown, Menu, Button, Row, Col } from "antd";
-import { UserOutlined } from "@ant-design/icons";
+import { Layout, Dropdown, Menu, Button, Row, Col, Popover, message } from "antd";
+import { UserOutlined, HomeOutlined } from "@ant-design/icons";
 import HomePage from "./components/HomePage";
 import AccountPage from "./components/AccountPage";
 import LoginPage from './components/LoginPage';
 import RegisterPage from './components/ResgisterPage';
 import PostPage from './components/PostPage';
+import { getUserProfile, getFavorite, searchItems } from './utils';
 
 const { Header, Content } = Layout;
 const TITLE = "Saturn";
@@ -15,28 +16,37 @@ class App extends React.Component {
     state = {
         authed: false,
         items: [],
+        favItems: [],
         userProfile: {},
         currentPage: "Home",
     };
 
     componentDidMount = () => {
         document.title = TITLE;
+        searchItems()
+            .then(data => {
+                this.setState({
+                    items: data
+                });
+            }).catch(err => {
+                message.error(err.message);
+            });
+    }
 
-        // const authToken = localStorage.getItem("authToken");
-        // searchItems()
-        // .then((data) => {
-        //     this.setState({
-        //         authed: authToken !== null,
-        //         items: data
-        //     })
-        // }).catch((err) => {
-        //     message.error(err.message);
-        // });
-    };
-
-    handleLoginSuccess = (token) => {
-        localStorage.setItem("authToken", token);
+    searchItems = async (query = {}) => {
+        const resp = await searchItems(query);
         this.setState({
+            items: resp,
+        });
+    }
+
+    handleLoginSuccess = async (token) => {
+        localStorage.setItem("authToken", token);
+        const profile = await getUserProfile();
+        const favs = await getFavorite();
+        this.setState({
+            userProfile: profile,
+            favItems: favs,
             authed: true,
         });
     };
@@ -45,24 +55,54 @@ class App extends React.Component {
         localStorage.removeItem("authToken");
         this.setState({
             authed: false,
-            currentPage: "Home"
+            currentPage: "Home",
+            favItems: [],
+            userProfile: {},
         });
     };
 
     renderContent = () => {
         if (this.state.currentPage === "Account") {
-            return <AccountPage profile={this.state.userProfile} handleProfileChange={this.showAccountPage}/>;
+            return <AccountPage profile={this.state.userProfile} handleProfileChange={this.fetchProfile} />;
         }
-        return <HomePage items={this.state.items} />;
+        return <HomePage items={this.state.items} favs={this.state.favItems} favOnChange={this.favOnChange} search={this.searchItems} authed={this.state.authed} />;
     };
 
-    showAccountPage = async () => {
-        const resp = await getUserProfile();
+    showAccountPage = () => {
         this.setState({
             currentPage: "Account",
-            userProfile: resp,
         });
     };
+
+    returnToHome = () => {
+        getFavorite().
+        then(data => {
+            this.setState({
+                favItems: data,
+                currentPage: "Home",
+            });
+        }).catch(err => {
+            message.error(err.message);
+        });
+    }
+
+    fetchProfile = async () => {
+        const resp = await getUserProfile();
+        this.setState({
+            userProfile: resp,
+        });
+    }
+
+    favOnChange = () => {
+        getFavorite().
+            then(data => {
+                this.setState({
+                    favItems: data,
+                });
+            }).catch(err => {
+                message.error(err.message);
+            });
+    }
 
     getUserMenu = () => {
         if (!this.state.authed) {
@@ -122,9 +162,14 @@ class App extends React.Component {
                 <Header>
                     <Row justify='space-between'>
                         <Col>
-                            <div style={{ fontSize: 16, fontWeight: 600, color: "white" }}>
-                                Saturn
-                            </div>
+                            <Popover content={"Home"} trigger="hover">
+                                <Button
+                                    icon={<HomeOutlined />}
+                                    shape="circle"
+                                    onClick={this.returnToHome}
+                                >
+                                </Button>
+                            </Popover>
                         </Col>
                         {/* <Col className='searchArea'>
                             <div style={{ display: "inline-block", width: "100%" }}>

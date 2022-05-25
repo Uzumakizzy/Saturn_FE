@@ -1,4 +1,4 @@
-const domain = '';
+const domain = "";
 
 export const login = (credential) => {
     const loginUrl = `${domain}/authenticate`;
@@ -64,9 +64,24 @@ export const editItem = (itemId, data) => {
     });
 }
 
-export const searchItems = (itemName, itemDesc, priceMin, priceMax) => {
-    const searchItemUrl = `${domain}/search?itemName${itemName}&itemDesc${itemDesc}&priceMin${priceMin}&priceMax${priceMax}`;
-    console.log(searchItemUrl);
+export const searchItems = (query={}) => {
+    let searchItemUrl = `${domain}/search?`;
+    searchItemUrl = searchItemUrl.concat("itemName=");
+    if (query.itemName !== undefined) {
+        searchItemUrl = searchItemUrl.concat(query.itemName);
+    }
+    searchItemUrl = searchItemUrl.concat("&itemDesc=");
+    if (query.itemDesc !== undefined) {
+        searchItemUrl = searchItemUrl.concat(query.itemDesc);
+    }
+    searchItemUrl = searchItemUrl.concat("&priceMin=");
+    if (query.priceMin !== undefined) {
+        searchItemUrl = searchItemUrl.concat(query.priceMin);
+    }
+    searchItemUrl = searchItemUrl.concat("&priceMax=");
+    if (query.priceMax !== undefined) {
+        searchItemUrl = searchItemUrl.concat(query.priceMax);
+    }
     return fetch(searchItemUrl, {
         method: "GET",
         headers: {
@@ -93,6 +108,22 @@ export const getMyItems = (value = "") => {
             throw Error("Fail to get my items.");
         }
         return response.json();
+    });
+}
+
+export const askItem = (itemId) => {
+    const authToken = localStorage.getItem("authToken");
+    const askUrl = `${domain}/ask/${itemId}`;
+
+    return fetch(askUrl, {
+        method: "PUT",
+        headers: {
+            Authorization: `Bearer ${authToken}`,
+        },
+    }).then(response => {
+        if (response.status !== 200) {
+            throw Error("Fail to ask this item.");
+        }
     });
 }
 
@@ -158,6 +189,21 @@ export const getFavorite = () => {
             throw Error("Fail to get favorite items.");
         }
         return response.json();
+    });
+}
+
+export const addFavorite = (itemId) => {
+    const authToken = localStorage.getItem("authToken");
+    const favUrl = `${domain}/favorite/${itemId}`;
+    return fetch(favUrl, {
+        method: "POST",
+        headers: {
+            Authorization: `Bearer ${authToken}`,
+        },
+    }).then(response => {
+        if (response.status !== 200) {
+            throw Error("Fail to like the item.");
+        }
     });
 }
 

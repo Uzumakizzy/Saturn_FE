@@ -24,10 +24,10 @@ class PostPage extends React.Component {
         return (
             <>
                 <a onClick={this.handleUploadItem}>
-                    Post
+                    Post Products
                 </a>
-                <Modal 
-                    title="Item Details"
+                <Modal
+                    title="Product Details"
                     destroyOnClose={true}
                     visible={this.state.modalVisible}
                     footer={null}

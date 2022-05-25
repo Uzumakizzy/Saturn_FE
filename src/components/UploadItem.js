@@ -5,7 +5,7 @@ import { uploadItem } from "../utils";
 const { Option } = Select;
 
 const layout = {
-    labelCol: { span: 8 },
+    labelCol: { span: 5 },
     wrapperCol: { span: 16 },
 };
 
@@ -77,16 +77,16 @@ class UploadItem extends React.Component {
                 onFinish={this.handleSubmit}
                 style={{ maxWidth: 1000, margin: "auto" }}
             >
-                <p style={{ fontSize: 25 }}>
+                {/* <p style={{ fontSize: 25 }}>
                     <center>
                         Details
                     </center>
                     <Divider />
-                </p>
+                </p> */}
                 <Form.Item name="itemName" label="Title" rules={[{ required: true }]}>
                     <Input />
                 </Form.Item>
-                <Form.Item name="category" label="Category"
+                {/* <Form.Item name="category" label="Category"
                 //rules={[{ required: true }]}
                 >
                     <Select
@@ -98,11 +98,11 @@ class UploadItem extends React.Component {
                         <Option value="electronics">electronics</Option>
                         <Option value="books">books</Option>
                     </Select>
-                </Form.Item>
+                </Form.Item> */}
                 <Form.Item name="itemPrice" label="Price" rules={[{ required: true }]}>
-                    <Input />
+                    <Input prefix="$" />
                 </Form.Item>
-                <Form.Item name="condition" label="Condition" >
+                {/* <Form.Item name="condition" label="Condition" >
                     <Input />
                 </Form.Item>
                 <Form.Item name="brand" label="Brand" >
@@ -117,7 +117,7 @@ class UploadItem extends React.Component {
                 //rules={[{ required: true }]}
                 >
                     <Input />
-                </Form.Item>
+                </Form.Item> */}
                 <Form.Item
                     name="itemDesc"
                     label="Description"
@@ -138,7 +138,7 @@ class UploadItem extends React.Component {
                     />
                 </Form.Item>
 
-                <p style={{ fontSize: 25 }}>
+                {/* <p style={{ fontSize: 25 }}>
                     <center>
                         Contact Information
                     </center>
@@ -173,8 +173,8 @@ class UploadItem extends React.Component {
                     ]}
                 >
                     <Input />
-                </Form.Item>
-                <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
+                </Form.Item> */}
+                <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 5 }}>
                     <Button type="primary" htmlType="submit" loading={this.state.loading}>
                         Post
                     </Button>

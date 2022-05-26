@@ -1,12 +1,13 @@
 import React from 'react';
-import { Layout, Dropdown, Menu, Button, Row, Col } from "antd";
-import { UserOutlined } from "@ant-design/icons";
+import { Layout, Dropdown, Menu, Button, Row, Col, Popover, message } from "antd";
+import { UserOutlined, HomeOutlined } from "@ant-design/icons";
 import HomePage from "./components/HomePage";
 import AccountPage from "./components/AccountPage";
 import LoginPage from './components/LoginPage';
 import RegisterPage from './components/ResgisterPage';
 import PostPage from './components/PostPage';
-import GuestHomePage from './components/GuestHomePage';
+import { getUserProfile, getFavorite, searchItems } from './utils';
+
 
 const { Header, Content } = Layout;
 const TITLE = "Saturn";
@@ -16,26 +17,37 @@ class App extends React.Component {
     state = {
         authed: false,
         items: [],
-        currentPage: "Home"
+        favItems: [],
+        userProfile: {},
+        currentPage: "Home",
     };
 
     componentDidMount = () => {
         document.title = TITLE;
-        // const authToken = localStorage.getItem("authToken");
-        // searchItems()
-        // .then((data) => {
-        //     this.setState({
-        //         authed: authToken !== null,
-        //         items: data
-        //     })
-        // }).catch((err) => {
-        //     message.error(err.message);
-        // });
+        searchItems()
+            .then(data => {
+                this.setState({
+                    items: data
+                });
+            }).catch(err => {
+                message.error(err.message);
+            });
     }
 
-    handleLoginSuccess = (token) => {
-        localStorage.setItem("authToken", token);
+    search = async (query = {}) => {
+        const resp = await searchItems(query);
         this.setState({
+            items: resp,
+        });
+    }
+
+    handleLoginSuccess = async (token) => {
+        localStorage.setItem("authToken", token);
+        const profile = await getUserProfile();
+        const favs = await getFavorite();
+        this.setState({
+            userProfile: profile,
+            favItems: favs,
             authed: true,
         });
     };
@@ -44,26 +56,75 @@ class App extends React.Component {
         localStorage.removeItem("authToken");
         this.setState({
             authed: false,
-            currentPage: "Home"
+            currentPage: "Home",
+            favItems: [],
+            askedItems: [],
+            userProfile: {},
         });
     };
 
     renderContent = () => {
         if (this.state.currentPage === "Account") {
-            return <AccountPage />;
+            return <AccountPage profile={this.state.userProfile} handleProfileChange={this.fetchProfile} />;
         }
-        if(this.state.authed){
-        return <HomePage items={this.state.items} />;
-        }else{
-            return <GuestHomePage items = {this.state.items}/>
-        }
+        return <HomePage
+            items={this.state.items}
+            askedItems={this.state.askedItems}
+            askedOnChange={this.askedOnChange}
+            favs={this.state.favItems}
+            favOnChange={this.favOnChange}
+            search={this.search}
+            authed={this.state.authed}
+            username={this.state.userProfile.username}
+        />;
     };
 
     showAccountPage = () => {
         this.setState({
-            currentPage: "Account"
+            currentPage: "Account",
         });
     };
+
+    returnToHome = () => {
+        getFavorite().
+            then(data => {
+                this.setState({
+                    favItems: data,
+                    currentPage: "Home",
+                });
+            }).catch(err => {
+                message.error(err.message);
+            });
+    }
+
+    fetchProfile = async () => {
+        const resp = await getUserProfile();
+        this.setState({
+            userProfile: resp,
+        });
+    }
+
+    favOnChange = () => {
+        getFavorite().
+            then(data => {
+                this.setState({
+                    favItems: data,
+                });
+            }).catch(err => {
+                message.error(err.message);
+            });
+    }
+
+    askedOnChange = () => {
+        searchItems().
+            then(data => {
+                this.setState({
+                    items: data
+                });
+            }).catch(err => {
+                message.error(err.message);
+            });
+    }
 
     getUserMenu = () => {
         if (!this.state.authed) {
@@ -123,9 +184,14 @@ class App extends React.Component {
                 <Header>
                     <Row justify='space-between'>
                         <Col>
-                            <div style={{ fontSize: 16, fontWeight: 600, color: "white" }}>
-                                Saturn
-                            </div>
+                            <Popover content={"Home"} trigger="hover">
+                                <Button
+                                    icon={<HomeOutlined />}
+                                    shape="circle"
+                                    onClick={this.returnToHome}
+                                >
+                                </Button>
+                            </Popover>
                         </Col>
                         {/* <Col className='searchArea'>
                             <div style={{ display: "inline-block", width: "100%" }}>

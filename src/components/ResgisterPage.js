@@ -108,7 +108,7 @@ class RegisterPage extends React.Component {
                         </Form.Item>
                         <Form.Item
                             label="Phone"
-                            name="phone"
+                            name="phone_number"
                             rules={[
                                 {
                                     pattern: '^([-]?[1-9][0-9]*|0)$',

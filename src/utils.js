@@ -1,4 +1,4 @@
-const domain = '';
+const domain = "";
 
 export const login = (credential) => {
     const loginUrl = `${domain}/authenticate`;
@@ -64,9 +64,24 @@ export const editItem = (itemId, data) => {
     });
 }
 
-export const searchItems = (itemName, itemDesc, priceMin, priceMax) => {
-    const searchItemUrl = `${domain}/search?itemName${itemName}&itemDesc${itemDesc}&priceMin${priceMin}&priceMax${priceMax}`;
-    console.log(searchItemUrl);
+export const searchItems = (query={}) => {
+    let searchItemUrl = `${domain}/search?`;
+    searchItemUrl = searchItemUrl.concat("itemName=");
+    if (query.itemName !== undefined) {
+        searchItemUrl = searchItemUrl.concat(query.itemName);
+    }
+    searchItemUrl = searchItemUrl.concat("&itemDesc=");
+    if (query.itemDesc !== undefined) {
+        searchItemUrl = searchItemUrl.concat(query.itemDesc);
+    }
+    searchItemUrl = searchItemUrl.concat("&priceMin=");
+    if (query.priceMin !== undefined) {
+        searchItemUrl = searchItemUrl.concat(query.priceMin);
+    }
+    searchItemUrl = searchItemUrl.concat("&priceMax=");
+    if (query.priceMax !== undefined) {
+        searchItemUrl = searchItemUrl.concat(query.priceMax);
+    }
     return fetch(searchItemUrl, {
         method: "GET",
         headers: {
@@ -80,19 +95,179 @@ export const searchItems = (itemName, itemDesc, priceMin, priceMax) => {
     });
 }
 
+export const getMyItems = (value = "") => {
+    const authToken = localStorage.getItem("authToken");
+    const getItemUrl = `${domain}/items/${value}`;
+
+    return fetch(getItemUrl, {
+        headers: {
+            Authorization: `Bearer ${authToken}`,
+        },
+    }).then((response) => {
+        if (response.status !== 200) {
+            throw Error("Fail to get my items.");
+        }
+        return response.json();
+    });
+}
+
+export const askItem = (itemId) => {
+    const authToken = localStorage.getItem("authToken");
+    const askUrl = `${domain}/ask/${itemId}`;
+
+    return fetch(askUrl, {
+        method: "PUT",
+        headers: {
+            Authorization: `Bearer ${authToken}`,
+        },
+    }).then(response => {
+        if (response.status !== 200) {
+            throw Error("Fail to ask this item.");
+        }
+    });
+}
+
+export const markSold = (itemId) => {
+    const authToken = localStorage.getItem("authToken");
+    const markSoldUrl = `${domain}/sold/${itemId}`;
+
+    return fetch(markSoldUrl, {
+        method: "PUT",
+        headers: {
+            Authorization: `Bearer  ${authToken}`,
+        },
+    }).then(response => {
+        if (response.status !== 200) {
+            throw Error("Fail to mark item as sold.");
+        }
+    });
+}
+
+export const getUserProfile = () => {
+    const authToken = localStorage.getItem("authToken");
+    const getProfileUrl = `${domain}/user/`;
+
+    return fetch(getProfileUrl, {
+        headers: {
+            Authorization: `Bearer ${authToken}`,
+        },
+    }).then(response => {
+        if (response.status !== 200) {
+            throw Error("Fail to retrive user profile.");
+        }
+        return response.json();
+    });
+}
+
+export const updateUser = (data) => {
+    const authToken = localStorage.getItem("authToken");
+    const updateUserUrl = `${domain}/user/`;
+
+    return fetch(updateUserUrl, {
+        method: "PUT",
+        headers: {
+            Authorization: `Bearer ${authToken}`,
+        },
+        body: data,
+    }).then(response => {
+        if (response.status !== 200) {
+            throw Error("Fail to update user profile.");
+        }
+    });
+}
+
+export const getFavorite = () => {
+    const authToken = localStorage.getItem("authToken");
+    const getFavUrl = `${domain}/favorite/`;
+
+    return fetch(getFavUrl, {
+        headers: {
+            Authorization: `Bearer ${authToken}`,
+        },
+    }).then(response => {
+        if (response.status !== 200) {
+            throw Error("Fail to get favorite items.");
+        }
+        return response.json();
+    });
+}
+
+export const addFavorite = (itemId) => {
+    const authToken = localStorage.getItem("authToken");
+    const favUrl = `${domain}/favorite/${itemId}`;
+    return fetch(favUrl, {
+        method: "POST",
+        headers: {
+            Authorization: `Bearer ${authToken}`,
+        },
+    }).then(response => {
+        if (response.status !== 200) {
+            throw Error("Fail to like the item.");
+        }
+    });
+}
+
+export const removeFav = (itemId) => {
+    const authToken = localStorage.getItem("authToken");
+    const dislikeUrl = `${domain}/favorite/${itemId}`;
+
+    return fetch(dislikeUrl, {
+        method: "DELETE",
+        headers: {
+            Authorization: `Bearer ${authToken}`,
+        },
+    }).then(response => {
+        if (response.status !== 200) {
+            throw Error("Fail to dislilke this item.");
+        }
+    });
+}
+
 export const uploadItem = (data) => {
     const authToken = localStorage.getItem("authToken");
     const uploadItemUrl = `${domain}/items`;
-   
+
     return fetch(uploadItemUrl, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${authToken}`,
-      },
-      body: data,
+        method: "POST",
+        headers: {
+            Authorization: `Bearer ${authToken}`,
+        },
+        body: data,
     }).then((response) => {
-      if (response.status !== 200) {
-        throw Error("Fail to upload item");
-      }
+        if (response.status !== 200) {
+            throw Error("Fail to upload item");
+        }
+    });
+}
+
+export const getAskedItems = () => {
+    const authToken = localStorage.getItem("authToken");
+    const getAskUrl = `${domain}/asks/`;
+
+    return fetch(getAskUrl, {
+        headers: {
+            Authorization: `Bearer ${authToken}`,
+        },
+    }).then(response => {
+        if (response.status !== 200) {
+            throw Error("Fail to get asked items.")
+        }
+        return response.json();
+    });
+}
+
+export const cancelAsk = (askId) => {
+    const authToken = localStorage.getItem("authToken");
+    const cancelUrl = `${domain}/asks/${askId}`;
+
+    return fetch(cancelUrl, {
+        method: "DELETE",
+        headers: {
+            Authorization: `Bearer ${authToken}`,
+        },
+    }).then(response => {
+        if (response.status !== 200) {
+            throw Error("Fail to cancel this ask.");
+        }
     });
 }

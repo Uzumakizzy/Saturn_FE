@@ -8,6 +8,7 @@ import RegisterPage from './components/ResgisterPage';
 import PostPage from './components/PostPage';
 import { getUserProfile, getFavorite, searchItems } from './utils';
 
+
 const { Header, Content } = Layout;
 const TITLE = "Saturn";
 

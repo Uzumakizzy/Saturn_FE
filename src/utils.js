@@ -239,3 +239,35 @@ export const uploadItem = (data) => {
         }
     });
 }
+
+export const getAskedItems = () => {
+    const authToken = localStorage.getItem("authToken");
+    const getAskUrl = `${domain}/asks/`;
+
+    return fetch(getAskUrl, {
+        headers: {
+            Authorization: `Bearer ${authToken}`,
+        },
+    }).then(response => {
+        if (response.status !== 200) {
+            throw Error("Fail to get asked items.")
+        }
+        return response.json();
+    });
+}
+
+export const cancelAsk = (askId) => {
+    const authToken = localStorage.getItem("authToken");
+    const cancelUrl = `${domain}/asks/${askId}`;
+
+    return fetch(cancelUrl, {
+        method: "DELETE",
+        headers: {
+            Authorization: `Bearer ${authToken}`,
+        },
+    }).then(response => {
+        if (response.status !== 200) {
+            throw Error("Fail to cancel this ask.");
+        }
+    });
+}

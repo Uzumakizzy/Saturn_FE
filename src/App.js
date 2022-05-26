@@ -33,7 +33,7 @@ class App extends React.Component {
             });
     }
 
-    searchItems = async (query = {}) => {
+    search = async (query = {}) => {
         const resp = await searchItems(query);
         this.setState({
             items: resp,
@@ -57,6 +57,7 @@ class App extends React.Component {
             authed: false,
             currentPage: "Home",
             favItems: [],
+            askedItems: [],
             userProfile: {},
         });
     };
@@ -65,7 +66,16 @@ class App extends React.Component {
         if (this.state.currentPage === "Account") {
             return <AccountPage profile={this.state.userProfile} handleProfileChange={this.fetchProfile} />;
         }
-        return <HomePage items={this.state.items} favs={this.state.favItems} favOnChange={this.favOnChange} search={this.searchItems} authed={this.state.authed} />;
+        return <HomePage
+            items={this.state.items}
+            askedItems={this.state.askedItems}
+            askedOnChange={this.askedOnChange}
+            favs={this.state.favItems}
+            favOnChange={this.favOnChange}
+            search={this.search}
+            authed={this.state.authed}
+            username={this.state.userProfile.username}
+        />;
     };
 
     showAccountPage = () => {
@@ -76,14 +86,14 @@ class App extends React.Component {
 
     returnToHome = () => {
         getFavorite().
-        then(data => {
-            this.setState({
-                favItems: data,
-                currentPage: "Home",
+            then(data => {
+                this.setState({
+                    favItems: data,
+                    currentPage: "Home",
+                });
+            }).catch(err => {
+                message.error(err.message);
             });
-        }).catch(err => {
-            message.error(err.message);
-        });
     }
 
     fetchProfile = async () => {
@@ -98,6 +108,17 @@ class App extends React.Component {
             then(data => {
                 this.setState({
                     favItems: data,
+                });
+            }).catch(err => {
+                message.error(err.message);
+            });
+    }
+
+    askedOnChange = () => {
+        searchItems().
+            then(data => {
+                this.setState({
+                    items: data
                 });
             }).catch(err => {
                 message.error(err.message);

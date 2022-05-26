@@ -1,5 +1,5 @@
 import React from "react";
-import { Form, Input, InputNumber, Button, message, Divider, Select, } from "antd";
+import { Form, Input, Button, message, Select, } from "antd";
 import { UploadOutlined } from '@ant-design/icons';
 import { uploadItem } from "../utils";
 const { Option } = Select;

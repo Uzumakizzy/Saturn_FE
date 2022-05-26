@@ -1,5 +1,5 @@
 import React from 'react';
-import { Layout, Dropdown, Menu, Button, Row, Col, Popover, message } from "antd";
+import { Layout, Dropdown, Menu, Button, Row, Col, message } from "antd";
 import { UserOutlined, HomeOutlined } from "@ant-design/icons";
 import HomePage from "./components/HomePage";
 import AccountPage from "./components/AccountPage";
@@ -184,14 +184,12 @@ class App extends React.Component {
                 <Header>
                     <Row justify='space-between'>
                         <Col>
-                            <Popover content={"Home"} trigger="hover">
-                                <Button
-                                    icon={<HomeOutlined />}
-                                    shape="circle"
-                                    onClick={this.returnToHome}
-                                >
-                                </Button>
-                            </Popover>
+                            <Button
+                                icon={<HomeOutlined />}
+                                shape="circle"
+                                onClick={this.returnToHome}
+                            >
+                            </Button>
                         </Col>
                         {/* <Col className='searchArea'>
                             <div style={{ display: "inline-block", width: "100%" }}>

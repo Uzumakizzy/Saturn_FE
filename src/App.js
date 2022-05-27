@@ -24,15 +24,7 @@ class App extends React.Component {
 
     componentDidMount = () => {
         document.title = TITLE;
-        searchItems()
-        .then(data => {
-            this.setState({
-                items: data
-            });
-        }).catch(err => {
-            message.error(err.message);
-        });
-
+        this.search();
         const authToken = localStorage.getItem("authToken");
         if (authToken !== null) {
             this.handleLoginSuccess(authToken);
@@ -40,10 +32,15 @@ class App extends React.Component {
     }
 
     search = async (query = {}) => {
-        const resp = await searchItems(query);
-        this.setState({
-            items: resp,
-        });
+        try {
+            const resp = await searchItems(query);
+            this.setState({
+                items: resp,
+                currentPage: "Home",
+            });
+        } catch(error) {
+            throw Error(error.message);
+        }
     }
 
     handleLoginSuccess = async (token) => {
@@ -91,15 +88,17 @@ class App extends React.Component {
     };
 
     returnToHome = () => {
-        getFavorite().
+        this.search();
+        if (this.state.authed) {
+            getFavorite().
             then(data => {
                 this.setState({
                     favItems: data,
-                    currentPage: "Home",
                 });
             }).catch(err => {
                 message.error(err.message);
             });
+        }
     }
 
     fetchProfile = async () => {

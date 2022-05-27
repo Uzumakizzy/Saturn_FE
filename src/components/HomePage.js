@@ -35,7 +35,6 @@ class HomePage extends React.Component {
     }
 
     getAskId = (item, username) => {
-        console.log('username: ', typeof(username), username);
         for (let i = 0; i < item.asks.length; i++) {
             if (item.asks[i].ask_by === username) {
                 return parseInt(item.asks[i].id);

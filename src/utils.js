@@ -50,16 +50,18 @@ export const deleteItem = (itemId) => {
 export const editItem = (itemId, data) => {
     const authToken = localStorage.getItem("authToken");
     const editItemUrl = `${domain}/items/${itemId}`;
-
+    
     return fetch(editItemUrl, {
         method: "PUT",
         headers: {
             Authorization: `Bearer ${authToken}`,
+            "Content-Type": "application/json",
         },
-        body: data,
+        body: JSON.stringify(data),
     }).then((response) => {
         if (response.status !== 200) {
-            throw Error("Fail to edit this item.");
+            console.log(response);
+            throw Error("Fail to update the item.");
         }
     });
 }
@@ -121,7 +123,9 @@ export const askItem = (itemId) => {
             Authorization: `Bearer ${authToken}`,
         },
     }).then(response => {
-        if (response.status !== 200) {
+        if (response.status === 403) {
+            throw Error("Cannot ask your own item.");
+        } else if (response.status !== 200) {
             throw Error("Fail to ask this item.");
         }
     });

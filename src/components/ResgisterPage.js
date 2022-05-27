@@ -147,7 +147,7 @@ class RegisterPage extends React.Component {
                             <Button
                                 type="primary"
                                 onClick={this.handleRegister}
-                                disabled={this.state.loading}
+                                loading={this.state.loading}
                                 shape="round"
                             >
                                 Submit

@@ -1,8 +1,10 @@
 import React from 'react';
-import { Layout, Menu, Breadcrumb, Button, List, Card, Carousel, Image, message, Form, Input, Popover } from 'antd';
-import { UserOutlined, HeartOutlined, ShoppingOutlined, LeftCircleFilled, RightCircleFilled, LaptopOutlined, StarFilled, HeartFilled } from '@ant-design/icons';
+import { Layout, Menu, Breadcrumb, Button, List, Card, Carousel, Image, message, Form, Input, Modal } from 'antd';
+import { UserOutlined, HeartOutlined, ShoppingOutlined, LeftCircleFilled, RightCircleFilled, LaptopOutlined, HeartFilled } from '@ant-design/icons';
 import Text from "antd/lib/typography/Text";
 import { getMyItems, deleteItem, markSold, updateUser, getFavorite, removeFav } from '../utils';
+import UploadItem from './UploadItem';
+import EditItemPage from './EditItemPage';
 
 const { Content, Sider } = Layout;
 
@@ -149,7 +151,7 @@ class MyProducts extends React.Component {
                                         </Text>
                                     </div>
                                 }
-                                actions={[<ProductDetails item={item} />]}
+                                actions={[<ProductDetails item={item} onEditSuccess={this.loadData} />]}
                                 extra={<RemoveProductButton item={item} onRemoveSuccess={this.loadData} />}
                             >
                                 {
@@ -179,7 +181,7 @@ class MyProducts extends React.Component {
 class ProductDetails extends React.Component {
 
     render = () => {
-        const { item } = this.props;
+        const { item, onEditSuccess } = this.props;
         const data = [
             {
                 title: 'Price: (Dollar)',
@@ -208,10 +210,61 @@ class ProductDetails extends React.Component {
                         </List.Item>
                     )}
                 />
+                <EditProductButton onEditSuccess={onEditSuccess} oldItem={item} />
             </>
         );
     }
 
+}
+
+class EditProductButton extends React.Component {
+
+    state = {
+        modalVisible: false,
+    };
+
+    handleCancel = () => {
+        this.setState({
+            modalVisible: false,
+        });
+    };
+
+    handleEditItem = () => {
+        this.setState({
+            modalVisible: true,
+        });
+    };
+
+    onEditSuccess = () => {
+        this.setState({
+            modalVisible: false,
+        });
+        this.props.onEditSuccess();
+    }
+
+    render = () => {
+        const { oldItem } = this.props;
+        return (
+            <>
+                <Button 
+                    onClick={this.handleEditItem}
+                    type="primary"
+                    shape='round'
+                >
+                    Edit
+                </Button>
+                <Modal
+                    title="Product Details"
+                    destroyOnClose={true}
+                    visible={this.state.modalVisible}
+                    footer={null}
+                    onCancel={this.handleCancel}
+                >
+                    <EditItemPage onEditSuccess={this.onEditSuccess} oldItem={oldItem} />
+                </Modal>
+            </>
+        );
+    };
 }
 
 class ProductsAsked extends React.Component {

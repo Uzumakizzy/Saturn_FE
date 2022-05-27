@@ -25,13 +25,18 @@ class App extends React.Component {
     componentDidMount = () => {
         document.title = TITLE;
         searchItems()
-            .then(data => {
-                this.setState({
-                    items: data
-                });
-            }).catch(err => {
-                message.error(err.message);
+        .then(data => {
+            this.setState({
+                items: data
             });
+        }).catch(err => {
+            message.error(err.message);
+        });
+
+        const authToken = localStorage.getItem("authToken");
+        if (authToken !== null) {
+            this.handleLoginSuccess(authToken);
+        }
     }
 
     search = async (query = {}) => {
@@ -200,6 +205,9 @@ class App extends React.Component {
                             </div>
                         </Col> */}
                         <Col>
+                            <div style={{ fontSize: 16, fontWeight: 600, color: "white", display: "inline-block", padding: "0 20px 0 0" }}>
+                                Hi {this.state.authed ? this.state.userProfile.username : "Guest"} !
+                            </div>
                             <Dropdown overlay={this.getUserMenu} placement="bottomRight">
                                 <Button icon={<UserOutlined />} shape="circle" >
                                 </Button>
